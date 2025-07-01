@@ -14,5 +14,5 @@ spring-boot-starter-web = { group = "org.springframework.boot", name = "spring-b
 spring-boot-starter-test = { group = "org.springframework.boot", name = "spring-boot-starter-test", version.ref = "spring-boot" }
 spring-boot-starter-jdbc = { group = "org.springframework.boot", name = "spring-boot-starter-jdbc", version.ref = "spring-boot" }
 postgresql = { group = "org.postgresql", name = "postgresql", version.ref = "postgresql" }
-flyway-core = { group = "org.flywaydb", name = "flyway-core", version.ref = "flyway" }
+flyway-core = { group = "org.flywaydb", name = "flyway-database-postgresql", version.ref = "flyway" }
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junit" }

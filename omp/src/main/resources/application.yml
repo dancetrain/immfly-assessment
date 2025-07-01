@@ -10,4 +10,4 @@ spring:
       max-rows: 1000
       query-timeout: 30
   flyway:
-    enabled: false
+    enabled: true
