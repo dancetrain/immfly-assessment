@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/immfly_db
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jdbc:
+    template:
+      fetch-size: 100
+      max-rows: 1000
+      query-timeout: 30
+  flyway:
+    enabled: false
