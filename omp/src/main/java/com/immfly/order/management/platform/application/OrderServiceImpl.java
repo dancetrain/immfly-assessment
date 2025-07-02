@@ -61,13 +61,15 @@ public class OrderServiceImpl implements OrderService {
 
         // Validate stock & calculate total
         double total = 0.0;
-        for (Map.Entry<UUID, Integer> item : productsQty.entrySet()) {
-            Product product = productRepository.findById(item.getKey())
-                    .orElseThrow(() -> new IllegalArgumentException("Product not found: " + item.getKey()));
-            if (product.getStock() < item.getValue()) {
-                throw new IllegalStateException("Product out of stock: " + product.getName());
+        if (productsQty != null) {
+            for (Map.Entry<UUID, Integer> item : productsQty.entrySet()) {
+                Product product = productRepository.findById(item.getKey())
+                        .orElseThrow(() -> new IllegalArgumentException("Product not found: " + item.getKey()));
+                if (product.getStock() < item.getValue()) {
+                    throw new IllegalStateException("Product out of stock: " + product.getName());
+                }
+                total += item.getValue() * product.getPrice().doubleValue();
             }
-            total += item.getValue() * product.getPrice().doubleValue();
         }
 
         order.setBuyerEmail(buyerEmail);

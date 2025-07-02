@@ -5,15 +5,21 @@ import com.immfly.order.management.platform.ContainerPostgresSQLTest;
 import com.immfly.order.management.platform.OrderManagementSystemTest;
 import com.immfly.order.management.platform.domain.model.Order;
 import com.immfly.order.management.platform.domain.model.OrderStatus;
+import com.immfly.order.management.platform.domain.model.Product;
 import com.immfly.order.management.platform.domain.port.out.OrderRepository;
+import com.immfly.order.management.platform.domain.port.out.ProductRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Map;
 import java.util.UUID;
 
+import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -26,6 +32,9 @@ public class OrdersControllerTest extends ContainerPostgresSQLTest {
 
     @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -82,5 +91,45 @@ public class OrdersControllerTest extends ContainerPostgresSQLTest {
         // Verify in repo
         Order canceled = orderRepository.findById(UUID.fromString(orderId)).orElseThrow();
         assertThat(canceled.getStatus()).isEqualTo(OrderStatus.CANCELED);
+    }
+
+    @Test
+    void shouldUpdateOrderWithProducts() throws Exception {
+        // Step 1: Setup test data
+        String createPayload = """
+            {"seatLetter":"B","seatNumber":22}
+            """;
+        String createdJson = mockMvc.perform(post("/orders")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(createPayload))
+                .andReturn().getResponse().getContentAsString();
+
+        String orderId = objectMapper.readTree(createdJson).get("id").asText();
+
+        Product product1 = new Product(UUID.randomUUID(), "Product 1", BigDecimal.valueOf(10.0), null, null, 6);
+        Product product2 = new Product(UUID.randomUUID(), "Product 2", BigDecimal.valueOf(20.0), null, null, 10);
+        productRepository.save(product1);
+        productRepository.save(product2);
+
+        // Step 2: Update with buyer email and products
+        String updatePayload = format("""
+            {
+                "buyerEmail":"test@example.com",
+                "productsQty": {"%s": %d, "%s": %d}
+            }
+            """, product1.getId(), product1.getStock(), product2.getId(), product2.getStock());
+
+        double expectedTotalPrice = product1.getStock() * product1.getPrice().doubleValue() +
+                product2.getStock() * product2.getPrice().doubleValue();
+
+        mockMvc.perform(put("/orders/{id}", orderId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(updatePayload))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.buyerEmail").value("test@example.com"))
+                .andExpect(jsonPath("$.status").value("OPEN"))
+                .andExpect(jsonPath("$.productsQty."+ product1.getId()).value( product1.getStock()))
+                .andExpect(jsonPath("$.productsQty."+ product2.getId()).value( product2.getStock()))
+                .andExpect(jsonPath("$.totalPrice").value(expectedTotalPrice));
     }
 }

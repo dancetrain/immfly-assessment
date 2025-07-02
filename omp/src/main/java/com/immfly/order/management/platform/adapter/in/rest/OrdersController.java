@@ -24,6 +24,14 @@ public class OrdersController {
         return ResponseEntity.ok(toResponse(order));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<OrderResponse> updateOrder(
+            @PathVariable UUID id,
+            @RequestBody UpdateOrderRequest request
+    ) {
+        Order updated = orderService.updateOrder(id, request.getBuyerEmail(), request.getProductsQty());
+        return ResponseEntity.ok(toResponse(updated));
+    }
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> cancelOrder(@PathVariable UUID id) {
         orderService.cancelOrder(id);
