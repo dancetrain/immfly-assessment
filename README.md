@@ -1,5 +1,11 @@
 # Immfly Assessment Test
 
+## Architecture Overview
+For implementation of in-flight Order Management System (OMP) we will use [Hexagonal Architecture](https://en.wikipedia.org/wiki/Hexagonal_architecture_(software)) with [Spring Boot](https://spring.io/projects/spring-boot).
+Also we will use [Testcontainers](https://www.testcontainers.org/) for integration tests and [Gradle](https://gradle.org/) as build tool.
+Local development will be done using docker compose for running local database.
+See [Environment Setup](#environment-setup) section for instructions on how to set up your local environment.
+
 ## Environment Setup 
 Assuming you have brew installed, so let's install the necessary tools to build project.
 
@@ -13,6 +19,7 @@ Start Colima with Docker:
                 start --network-address  \
                 -f
 ```
+Wait for Colima to start, it may take a few minutes.
 
 Configure environment variables for Java and Docker:
 ```bash
