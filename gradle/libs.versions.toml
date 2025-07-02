@@ -4,6 +4,7 @@ spring-dependency-management = "1.1.7"
 junit = "5.13.2"
 postgresql = "42.7.7"
 flyway = "11.10.0"
+testcontainers = "1.21.3"
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
@@ -16,3 +17,6 @@ spring-boot-starter-jdbc = { group = "org.springframework.boot", name = "spring-
 postgresql = { group = "org.postgresql", name = "postgresql", version.ref = "postgresql" }
 flyway-core = { group = "org.flywaydb", name = "flyway-database-postgresql", version.ref = "flyway" }
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junit" }
+testcontainers = { group = "org.testcontainers", name = "testcontainers", version.ref = "testcontainers" }
+testcontainers-junit = { group = "org.testcontainers", name = "junit-jupiter", version.ref = "testcontainers" }
+testcontainers-postgresql = { group = "org.testcontainers", name = "postgresql", version.ref = "testcontainers" }
