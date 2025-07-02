@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -37,7 +38,7 @@ class JdbcOrderRepositoryTest extends ContainerPostgresSQLTest {
                 11,
                 OrderStatus.OPEN,
                 "test@example.com",
-                List.of(),
+                Map.of(UUID.randomUUID(), 10),
                 0.0,
                 null,
                 null,
@@ -60,7 +61,7 @@ class JdbcOrderRepositoryTest extends ContainerPostgresSQLTest {
                 15,
                 OrderStatus.FINISHED,
                 "updated@example.com",
-                List.of(UUID.randomUUID(), UUID.randomUUID()),
+                Map.of(UUID.randomUUID(), 1),
                 99.99,
                 "PAID",
                 LocalDateTime.now(),

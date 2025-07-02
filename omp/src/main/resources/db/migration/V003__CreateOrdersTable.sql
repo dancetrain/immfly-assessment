@@ -5,7 +5,7 @@ CREATE TABLE orders
     seat_number     INT,
     status          VARCHAR(20),
     buyer_email     VARCHAR(255),
-    product_ids     TEXT,
+    products_qty    JSONB,
     total_price     DECIMAL(10, 2),
     payment_status  VARCHAR(50),
     payment_date    TIMESTAMP,

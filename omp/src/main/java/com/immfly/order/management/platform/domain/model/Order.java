@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Data
@@ -15,7 +15,7 @@ public class Order {
     private int seatNumber;
     private OrderStatus status;
     private String buyerEmail;
-    private List<UUID> productIds;
+    private Map<UUID, Integer> productsQty; // Map of product ID to quantity
     private double totalPrice;
     private String paymentStatus;
     private LocalDateTime paymentDate;
