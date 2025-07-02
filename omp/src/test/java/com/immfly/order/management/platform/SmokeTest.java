@@ -11,24 +11,8 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-@SpringBootTest(
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
-)
-@Testcontainers
-public class SmokeTest {
-
-    static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16.3")
-            .withDatabaseName("testdb")
-            .withUsername("test")
-            .withPassword("test");
-
-    @DynamicPropertySource
-    static void overrideProperties(DynamicPropertyRegistry registry) {
-        postgres.start();
-        registry.add("spring.datasource.url", postgres::getJdbcUrl);
-        registry.add("spring.datasource.username", postgres::getUsername);
-        registry.add("spring.datasource.password", postgres::getPassword);
-    }
+@OrderManagementSystemTest
+public class SmokeTest extends ContainerPostgresSQLTest {
 
     @Test
     void contextLoads() {
