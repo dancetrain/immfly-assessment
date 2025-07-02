@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FinishOrderRequest {
-    private String paymentStatus;
     private String cardToken;
     private String paymentGateway;
 }

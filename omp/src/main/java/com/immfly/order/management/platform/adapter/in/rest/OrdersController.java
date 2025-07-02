@@ -40,7 +40,6 @@ public class OrdersController {
     ) {
         Order finished = orderService.finishOrder(
                 id,
-                request.getPaymentStatus(),
                 request.getCardToken(),
                 request.getPaymentGateway()
         );

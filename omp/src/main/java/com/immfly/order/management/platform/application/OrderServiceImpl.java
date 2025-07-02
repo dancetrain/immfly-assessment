@@ -81,7 +81,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public Order finishOrder(UUID orderId, String paymentStatus, String cardToken, String paymentGatewayName) {
+    public Order finishOrder(UUID orderId, String cardToken, String paymentGatewayName) {
         Order order = findOrThrow(orderId);
 
         if (order.getStatus() != OrderStatus.OPEN) {

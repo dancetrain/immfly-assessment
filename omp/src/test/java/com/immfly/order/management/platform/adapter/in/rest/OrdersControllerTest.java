@@ -3,6 +3,7 @@ package com.immfly.order.management.platform.adapter.in.rest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.immfly.order.management.platform.ContainerPostgresSQLTest;
 import com.immfly.order.management.platform.OrderManagementSystemTest;
+import com.immfly.order.management.platform.adapter.out.payment.MockPaymentGateway;
 import com.immfly.order.management.platform.domain.model.Order;
 import com.immfly.order.management.platform.domain.model.OrderStatus;
 import com.immfly.order.management.platform.domain.model.Product;
@@ -133,23 +134,26 @@ public class OrdersControllerTest extends ContainerPostgresSQLTest {
                 .andExpect(jsonPath("$.totalPrice").value(expectedTotalPrice));
     }
 
-    @Test
-    void shouldFinishOrder() throws Exception {
-        // Step 1: Create
-        String createPayload = """
-            {"seatLetter":"C","seatNumber":33}
-            """;
-        String createdJson = mockMvc.perform(post("/orders")
+    private String createOrderAndGetId() throws Exception {
+        String payload = """
+        {"seatLetter":"E","seatNumber":55}
+        """;
+
+        String response = mockMvc.perform(post("/orders")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(createPayload))
+                        .content(payload))
+                .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
 
-        String orderId = objectMapper.readTree(createdJson).get("id").asText();
+        return objectMapper.readTree(response).get("id").asText();
+    }
 
-        // Step 2: Finish
+    @Test
+    void shouldFinishOrder() throws Exception {
+        String orderId = createOrderAndGetId();
+
         String finishPayload = """
             {
-                "paymentStatus": "PAID",
                 "cardToken": "mock-card",
                 "paymentGateway": "mock-success"
             }
@@ -161,5 +165,63 @@ public class OrdersControllerTest extends ContainerPostgresSQLTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value("FINISHED"))
                 .andExpect(jsonPath("$.paymentStatus").exists());
+    }
+
+    @Test
+    void finishOrderReturnsFailed() throws Exception {
+        String orderId = createOrderAndGetId();
+
+        String finishPayload = """
+        {
+            "cardToken": "mock-card",
+            "paymentGateway": "mock-fail"
+        }
+        """;
+
+        mockMvc.perform(post("/orders/{id}/finish", orderId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(finishPayload))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("FINISHED"))
+                .andExpect(jsonPath("$.paymentStatus").value("PaymentFailed"));
+    }
+
+    @Test
+    void finishOrderReturnsOffline() throws Exception {
+        String orderId = createOrderAndGetId();
+
+        String finishPayload = """
+        {
+            "cardToken": "mock-card",
+            "paymentGateway": "mock-offline"
+        }
+        """;
+
+        mockMvc.perform(post("/orders/{id}/finish", orderId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(finishPayload))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("FINISHED"))
+                .andExpect(jsonPath("$.paymentStatus").value("OfflinePayment"));
+    }
+
+
+    @Test
+    void finishOrderReturnsPaidForVisa() throws Exception {
+        String orderId = createOrderAndGetId();
+
+        String finishPayload = """
+        {
+            "cardToken": "mock-card",
+            "paymentGateway": "visa"
+        }
+        """;
+
+        mockMvc.perform(post("/orders/{id}/finish", orderId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(finishPayload))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("FINISHED"))
+                .andExpect(jsonPath("$.paymentStatus").value("Paid"));
     }
 }
