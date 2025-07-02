@@ -4,7 +4,10 @@ import com.immfly.order.management.platform.ContainerPostgresSQLTest;
 import com.immfly.order.management.platform.OrderManagementSystemTest;
 import com.immfly.order.management.platform.domain.model.Product;
 import com.immfly.order.management.platform.domain.port.out.ProductRepository;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;

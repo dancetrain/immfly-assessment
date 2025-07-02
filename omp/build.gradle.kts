@@ -30,8 +30,11 @@ dependencies {
     testImplementation(libs.testcontainers)
     testImplementation(libs.testcontainers.junit)
     testImplementation(libs.testcontainers.postgresql)
+
+    // CVE Fixes for testcontainers
+    testImplementation("org.apache.commons:commons-compress:1.27.1")
 }
 
-tasks.test {
+tasks.withType<Test>() {
     useJUnitPlatform()
 }
