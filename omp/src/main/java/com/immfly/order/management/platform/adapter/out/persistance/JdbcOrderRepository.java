@@ -80,16 +80,16 @@ public class JdbcOrderRepository implements OrderRepository {
 
     private MapSqlParameterSource mapOrderToParams(Order order) {
         return new MapSqlParameterSource()
-                .addValue("id", order.id())
-                .addValue("seatLetter", order.seatLetter())
-                .addValue("seatNumber", order.seatNumber())
-                .addValue("status", order.status().name())
-                .addValue("buyerEmail", order.buyerEmail())
-                .addValue("productIds", serializeProductIds(order.productIds()))
-                .addValue("totalPrice", order.totalPrice())
-                .addValue("paymentStatus", order.paymentStatus())
-                .addValue("paymentDate", order.paymentDate())
-                .addValue("paymentGateway", order.paymentGateway());
+                .addValue("id", order.getId())
+                .addValue("seatLetter", order.getSeatLetter())
+                .addValue("seatNumber", order.getSeatNumber())
+                .addValue("status", order.getStatus().name())
+                .addValue("buyerEmail", order.getBuyerEmail())
+                .addValue("productIds", serializeProductIds(order.getProductIds()))
+                .addValue("totalPrice", order.getTotalPrice())
+                .addValue("paymentStatus", order.getPaymentStatus())
+                .addValue("paymentDate", order.getPaymentDate())
+                .addValue("paymentGateway", order.getPaymentGateway());
     }
 
     private Order mapRowToOrder(ResultSet rs, int rowNum) throws SQLException {

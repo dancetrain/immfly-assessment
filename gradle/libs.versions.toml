@@ -5,6 +5,7 @@ junit = "5.13.2"
 postgresql = "42.7.7"
 flyway = "11.10.0"
 testcontainers = "1.21.3"
+lombok = "1.18.38"
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
@@ -20,3 +21,4 @@ junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.r
 testcontainers = { group = "org.testcontainers", name = "testcontainers", version.ref = "testcontainers" }
 testcontainers-junit = { group = "org.testcontainers", name = "junit-jupiter", version.ref = "testcontainers" }
 testcontainers-postgresql = { group = "org.testcontainers", name = "postgresql", version.ref = "testcontainers" }
+lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" }

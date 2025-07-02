@@ -4,5 +4,5 @@ public enum OrderStatus {
     OPEN,
     DROPPED,
     FINISHED,
-    CANCELLED,
+    CANCELED,
 }

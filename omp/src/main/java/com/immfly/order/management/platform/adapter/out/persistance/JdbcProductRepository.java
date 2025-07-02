@@ -77,12 +77,12 @@ public class JdbcProductRepository implements ProductRepository {
 
     private MapSqlParameterSource mapProductToParams(Product product) {
         return new MapSqlParameterSource()
-                .addValue("id", product.id())
-                .addValue("name", product.name())
-                .addValue("price", product.price())
-                .addValue("categoryId", product.categoryId())
-                .addValue("image", product.image())
-                .addValue("stock", product.stock());
+                .addValue("id", product.getId())
+                .addValue("name", product.getName())
+                .addValue("price", product.getPrice())
+                .addValue("categoryId", product.getCategoryId())
+                .addValue("image", product.getImage())
+                .addValue("stock", product.getStock());
     }
 
     private Product mapRowToProduct(ResultSet rs, int rowNum) throws SQLException {

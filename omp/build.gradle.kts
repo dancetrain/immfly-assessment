@@ -15,6 +15,11 @@ repositories {
 }
 
 dependencies {
+    compileOnly(libs.lombok)
+    annotationProcessor(libs.lombok)
+    testCompileOnly(libs.lombok)
+    testAnnotationProcessor(libs.lombok)
+
     implementation(libs.spring.boot.starter.web)
     implementation(libs.spring.boot.starter.jdbc)
     implementation(libs.postgresql)
