@@ -32,6 +32,21 @@ public class OrdersController {
         Order updated = orderService.updateOrder(id, request.getBuyerEmail(), request.getProductsQty());
         return ResponseEntity.ok(toResponse(updated));
     }
+
+    @PostMapping("/{id}/finish")
+    public ResponseEntity<OrderResponse> finishOrder(
+            @PathVariable UUID id,
+            @RequestBody FinishOrderRequest request
+    ) {
+        Order finished = orderService.finishOrder(
+                id,
+                request.getPaymentStatus(),
+                request.getCardToken(),
+                request.getPaymentGateway()
+        );
+        return ResponseEntity.ok(toResponse(finished));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> cancelOrder(@PathVariable UUID id) {
         orderService.cancelOrder(id);

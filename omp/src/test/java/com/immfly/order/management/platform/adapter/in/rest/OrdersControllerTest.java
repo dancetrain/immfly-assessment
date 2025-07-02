@@ -132,4 +132,34 @@ public class OrdersControllerTest extends ContainerPostgresSQLTest {
                 .andExpect(jsonPath("$.productsQty."+ product2.getId()).value( product2.getStock()))
                 .andExpect(jsonPath("$.totalPrice").value(expectedTotalPrice));
     }
+
+    @Test
+    void shouldFinishOrder() throws Exception {
+        // Step 1: Create
+        String createPayload = """
+            {"seatLetter":"C","seatNumber":33}
+            """;
+        String createdJson = mockMvc.perform(post("/orders")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(createPayload))
+                .andReturn().getResponse().getContentAsString();
+
+        String orderId = objectMapper.readTree(createdJson).get("id").asText();
+
+        // Step 2: Finish
+        String finishPayload = """
+            {
+                "paymentStatus": "PAID",
+                "cardToken": "mock-card",
+                "paymentGateway": "mock-success"
+            }
+            """;
+
+        mockMvc.perform(post("/orders/{id}/finish", orderId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(finishPayload))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("FINISHED"))
+                .andExpect(jsonPath("$.paymentStatus").exists());
+    }
 }
