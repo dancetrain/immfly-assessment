@@ -62,7 +62,7 @@ Load environment variables:
 ## Build and Run
 To build the project, run the following command:
 ```bash
-gradle build
+./gradlew build
 ```
 Start the local database using Docker Compose:
 ```bash
@@ -71,5 +71,14 @@ docker compose up -d
 
 To run the application, use the following command:
 ```bash
-gradle omp:bootRun
+./gradlew omp:bootRun
+```
+
+To run in demo mode, first build local image:
+```bash
+./gradlew omb:jibDockerBuild
+```
+Then run the service with the following command:
+```bash
+docker compose -f docker-compose-demo.yml up -d
 ```
