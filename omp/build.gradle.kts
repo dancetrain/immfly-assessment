@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.spring.boot)
     alias(libs.plugins.spring.dependency.management)
+    alias(libs.plugins.jib)
     java
 }
 
@@ -37,4 +38,17 @@ dependencies {
 
 tasks.withType<Test>() {
     useJUnitPlatform()
+}
+
+jib {
+    from {
+        image = "eclipse-temurin:21-jre" // Java 21 base image
+    }
+    to {
+        image = "ghcr.io/dancetrain/order-management-platform:borsky-latest"
+    }
+    container {
+        ports = listOf("8080")
+        creationTime = "USE_CURRENT_TIMESTAMP"
+    }
 }

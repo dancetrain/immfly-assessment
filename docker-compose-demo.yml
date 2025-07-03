@@ -1,0 +1,26 @@
+services:
+  postgres:
+    image: postgres:16.3
+    container_name: immfly_postgres_demo
+    environment:
+      POSTGRES_USER: immfly_demo
+      POSTGRES_PASSWORD: immfly_demo_pass
+      POSTGRES_DB: immfly_db
+    volumes:
+      - postgres_demo_data:/var/lib/postgresql/data
+  omp:
+    image: ghcr.io/dancetrain/order-management-platform:borsky-latest
+    pull_policy: "never"
+    container_name: immfly_omp_demo
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/immfly_db
+      SPRING_DATASOURCE_USERNAME: immfly_demo
+      SPRING_DATASOURCE_PASSWORD: immfly_demo_pass
+      SPRING_PROFILES_ACTIVE: demo
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_demo_data:

@@ -13,8 +13,20 @@ and the following sub-packages:
  - `application` - contains business logic for managing order operations.
  - `domain` - contains domain model and services for internal business logic.
 
+### Notes
+- Additional order status `CANCELLED` is added which was missing in the original requirements.
+- Not using PaymentStatus enum as this is a mock implementation and is subject to change in the future.
+- Using Lombok library for reducing boilerplate code in domain model classes.
+
 Tests are implemented to test only Happy Path scenarios, as the focus is on the implementation of the core functionality.
 ![test-coverage.png](test-coverage.png)
+
+
+## Future Improvements
+- Validate seat number and letter on order creation.
+- Notification system for order status changes (Email notification to customer with receipt, On-Board crew notification, etc).
+- Synchronization with stock management system to ensure that ordered items are available.
+- 
 
 
 ## Environment Setup 
