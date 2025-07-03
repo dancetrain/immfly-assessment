@@ -6,8 +6,19 @@ Also we will use [Testcontainers](https://www.testcontainers.org/) for integrati
 Local development will be done using docker compose for running local database.
 See [Environment Setup](#environment-setup) section for instructions on how to set up your local environment.
 
+## Solution Overview
+The solution consists of a single module `omp` with base package `com.immfly.order.management.platform`
+and the following sub-packages:
+ - `adapter` - contains adapters for external systems, such as database and REST API.
+ - `application` - contains business logic for managing order operations.
+ - `domain` - contains domain model and services for internal business logic.
+
+Tests are implemented to test only Happy Path scenarios, as the focus is on the implementation of the core functionality.
+![test-coverage.png](test-coverage.png)
+
+
 ## Environment Setup 
-Assuming you have brew installed, so let's install the necessary tools to build project.
+Assuming you have [Homebrew](https://brew.sh) installed, so let's install the rest of necessary tools to build project.
 
 ```bash
 brew install jq gradle openjdk@21 colima docker docker-compose
@@ -34,4 +45,19 @@ echo 'export TESTCONTAINERS_RYUK_DISABLED=true' >> ~/.zprofile
 Load environment variables:
 ```bash
 . ~/.zprofile
+```
+
+## Build and Run
+To build the project, run the following command:
+```bash
+gradle build
+```
+Start the local database using Docker Compose:
+```bash
+docker compose up -d
+```
+
+To run the application, use the following command:
+```bash
+gradle omp:bootRun
 ```
