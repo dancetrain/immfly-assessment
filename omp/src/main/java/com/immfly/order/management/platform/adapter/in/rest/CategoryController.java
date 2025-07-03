@@ -28,10 +28,6 @@ public class CategoryController {
     }
 
     private CategoryDTO toDTO(Category category) {
-        return new CategoryDTO(
-                category.getId(),
-                category.getName(),
-                category.getParentCategoryId()
-        );
+        return CategoryDTO.from(category);
     }
 }
